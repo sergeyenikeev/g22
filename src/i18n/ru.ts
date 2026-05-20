@@ -72,7 +72,23 @@ export const ru = {
   resetProgress: "Сбросить прогресс",
   confirmReset: "Подтвердить сброс",
   dayModifier: "Условие дня",
-  reward: "Награда"
+  reward: "Награда",
+  startEndless: "Начать бесконечную смену",
+  startBlitz: "Начать блиц",
+  practiceLocked: "Откроется позже",
+  bought: "Куплено",
+  selected: "Выбрано",
+  equip: "Выбрать",
+  finishRun: "Завершить смену",
+  resume: "Вернуться",
+  cloudConnected: "Облако подключено",
+  cloudUnavailable: "Облако недоступно",
+  mode: "Режим",
+  orders: "Заказы",
+  timeLeft: "Осталось",
+  patience: "Терпение",
+  newItems: "Открыто",
+  best: "Лучшее"
 } as const;
 
 export type RuDictionary = typeof ru;

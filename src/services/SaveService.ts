@@ -1,4 +1,4 @@
-import { campaignDays } from "../data/gameData";
+import { campaignDays, cosmetics } from "../data/gameData";
 
 export interface SaveData {
   version: number;
@@ -26,12 +26,20 @@ export interface SaveData {
     bestCombo: number;
     endlessScore: number;
     dailyChallengeScore: number;
+    totalServed: number;
+    campaignCompleted: boolean;
   };
   lastDailyChallengeDate: string;
 }
 
 const SAVE_VERSION = 1;
 const SAVE_KEY = "tea-run-save";
+
+const createDefaultOwnedCosmetics = (): Record<string, string[]> =>
+  Object.fromEntries(Object.entries(cosmetics).map(([category, items]) => [category, [items[0]]]));
+
+const createDefaultEquippedCosmetics = (): Record<string, string> =>
+  Object.fromEntries(Object.entries(cosmetics).map(([category, items]) => [category, items[0]]));
 
 export class SaveService {
   createDefaultSave(): SaveData {
@@ -44,8 +52,8 @@ export class SaveService {
       dayStars: {},
       unlockedRecipeIds: ["r01", "r02", "r03"],
       boughtUpgradeIds: [],
-      ownedCosmetics: {},
-      equippedCosmetics: {},
+      ownedCosmetics: createDefaultOwnedCosmetics(),
+      equippedCosmetics: createDefaultEquippedCosmetics(),
       settings: {
         musicEnabled: true,
         soundsEnabled: true,
@@ -60,7 +68,9 @@ export class SaveService {
         bestTipsDay: 0,
         bestCombo: 0,
         endlessScore: 0,
-        dailyChallengeScore: 0
+        dailyChallengeScore: 0,
+        totalServed: 0,
+        campaignCompleted: false
       },
       lastDailyChallengeDate: ""
     };
@@ -87,6 +97,10 @@ export class SaveService {
     return fresh;
   }
 
+  normalize(data: Partial<SaveData>): SaveData {
+    return this.migrate(data);
+  }
+
   private migrate(data: Partial<SaveData>): SaveData {
     const base = this.createDefaultSave();
     const merged: SaveData = {
@@ -105,6 +119,15 @@ export class SaveService {
     merged.day = Math.max(1, Math.min(campaignDays.length, merged.day));
     if (!["low", "medium", "high"].includes(merged.settings.graphicsQuality)) {
       merged.settings.graphicsQuality = "high";
+    }
+    merged.unlockedRecipeIds = merged.unlockedRecipeIds.filter((id, index, list) => id.startsWith("r") && list.indexOf(id) === index);
+    if (merged.unlockedRecipeIds.length === 0) merged.unlockedRecipeIds = [...base.unlockedRecipeIds];
+    for (const [category, items] of Object.entries(cosmetics)) {
+      const owned = (merged.ownedCosmetics[category] ?? []).filter((item, index, list) => items.includes(item) && list.indexOf(item) === index);
+      merged.ownedCosmetics[category] = owned.length ? owned : [items[0]];
+      if (!merged.ownedCosmetics[category].includes(merged.equippedCosmetics[category])) {
+        merged.equippedCosmetics[category] = merged.ownedCosmetics[category][0];
+      }
     }
     return merged;
   }

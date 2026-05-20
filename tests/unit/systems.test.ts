@@ -1,4 +1,4 @@
-import { recipes, upgrades } from "../../src/data/gameData";
+import { achievements, cosmetics, recipes, upgrades } from "../../src/data/gameData";
 import { LocalizationService } from "../../src/services/LocalizationService";
 import { ResponsiveLayoutService } from "../../src/services/ResponsiveLayoutService";
 import { SaveService } from "../../src/services/SaveService";
@@ -51,6 +51,17 @@ describe("сервисы", () => {
     const s = new SaveService();
     const data = s.createDefaultSave();
     expect(data.day).toBe(1);
+  });
+
+  it("SaveService выдает стартовую косметику", () => {
+    const data = new SaveService().createDefaultSave();
+    expect(data.ownedCosmetics.cups).toContain(cosmetics.cups[0]);
+    expect(data.equippedCosmetics.samovars).toBe(cosmetics.samovars[0]);
+  });
+
+  it("в игре есть набор достижений", () => {
+    expect(achievements.length).toBeGreaterThanOrEqual(8);
+    expect(achievements.every((achievement) => achievement.reward > 0)).toBe(true);
   });
 
   it("LocalizationService работает через t()", () => {

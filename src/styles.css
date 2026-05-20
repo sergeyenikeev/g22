@@ -324,6 +324,23 @@ input {
   min-width: 0;
 }
 
+.meter {
+  height: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 211, 109, 0.52);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.meter-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--mint), var(--amber));
+  transition: width 120ms linear;
+}
+
 .guest-face {
   width: 58px;
   height: 58px;
@@ -414,6 +431,68 @@ input {
   min-height: 210px;
 }
 
+.locked-card {
+  filter: saturate(0.72);
+  opacity: 0.72;
+}
+
+.owned-card {
+  border-color: rgba(117, 239, 179, 0.86);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 2px rgba(117, 239, 179, 0.18);
+}
+
+.result-grid,
+.result-columns {
+  display: grid;
+  gap: 12px;
+}
+
+.result-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.result-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.result-columns ul {
+  margin: 8px 0 0;
+  padding-left: 24px;
+}
+
+.cosmetic-card {
+  min-height: 260px;
+}
+
+.cosmetic-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.cosmetic-item {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) minmax(150px, auto);
+  align-items: center;
+  gap: 10px;
+  min-height: 62px;
+  padding: 8px;
+  border: 1px solid rgba(255, 211, 109, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 211, 109, 0.08);
+}
+
+.cosmetic-preview {
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(255, 239, 190, 0.9);
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--amber), var(--tea));
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
 .settings-list label {
   display: flex;
   align-items: center;
@@ -423,10 +502,30 @@ input {
   font-weight: 800;
 }
 
-.settings-list input {
+.settings-list input[type="checkbox"] {
   width: 28px;
   height: 28px;
   accent-color: var(--mint);
+}
+
+.settings-list input[type="range"] {
+  width: min(320px, 42vw);
+  accent-color: var(--mint);
+}
+
+.select {
+  min-height: 48px;
+  min-width: 170px;
+  border: 2px solid rgba(255, 211, 109, 0.72);
+  border-radius: 8px;
+  color: var(--ink);
+  background: rgba(32, 18, 12, 0.94);
+  padding: 8px 12px;
+}
+
+.cloud-status {
+  color: var(--mint);
+  font-weight: 900;
 }
 
 .victory-panel {
@@ -554,10 +653,6 @@ input {
 }
 
 @media (max-width: 1180px) {
-  .menu-grid-main {
-    grid-template-columns: repeat(2, minmax(220px, 1fr));
-  }
-
   .ring-grid {
     grid-template-columns: repeat(3, minmax(160px, 1fr));
   }
@@ -565,9 +660,13 @@ input {
   .game-layout {
     grid-template-columns: minmax(200px, 0.8fr) minmax(380px, 1.4fr) minmax(220px, 0.9fr);
   }
+
+  .result-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 900px) {
   .screen {
     gap: 10px;
   }
@@ -587,6 +686,103 @@ input {
 
   .ring-grid {
     grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
+
+  .result-columns,
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cosmetic-item {
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .cosmetic-item .btn {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-height: 620px) and (min-width: 960px) {
+  .screen {
+    gap: 8px;
+    padding: 12px 18px;
+  }
+
+  .panel {
+    padding: 10px 14px;
+  }
+
+  .hero-panel {
+    min-height: 112px;
+  }
+
+  .title {
+    font-size: clamp(30px, 3.3vw, 52px);
+  }
+
+  .text {
+    font-size: clamp(16px, 1.2vw, 20px);
+  }
+
+  .metric {
+    font-size: clamp(19px, 1.5vw, 24px);
+  }
+
+  .btn {
+    min-height: 56px;
+    padding: 11px 18px;
+    font-size: clamp(18px, 1.35vw, 23px);
+  }
+
+  .btn-small {
+    min-height: 50px;
+  }
+
+  .menu-grid {
+    gap: 10px;
+    grid-auto-rows: minmax(56px, max-content);
+  }
+
+  .menu-grid-main {
+    grid-template-columns: repeat(3, minmax(190px, 1fr));
+  }
+
+  .status-strip,
+  .game-hud {
+    gap: 8px;
+  }
+
+  .game-layout {
+    gap: 8px;
+    grid-template-columns: minmax(185px, 0.82fr) minmax(300px, 1.18fr) minmax(210px, 0.9fr);
+  }
+
+  .side-panel {
+    gap: 8px;
+  }
+
+  .guest-card {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .guest-face {
+    width: 46px;
+    height: 46px;
+  }
+
+  #game-canvas {
+    width: min(100%, calc(100vh - 250px), 720px);
+    min-width: 250px;
+  }
+
+  .ring-grid {
+    grid-template-columns: repeat(6, minmax(112px, 1fr));
+  }
+
+  .recipe-step {
+    min-height: 30px;
+    font-size: 15px;
   }
 }
 

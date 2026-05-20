@@ -23,6 +23,29 @@ describe("интеграция SDK и i18n", () => {
     expect(i18n.getLanguage()).toBe("ru");
     delete (window as any).YaGames;
   });
+
+  it("мягко работает с облачными данными SDK", async () => {
+    let savedCloud: unknown = null;
+    (window as any).YaGames = {
+      init: async () => ({
+        environment: { i18n: { lang: "ru" } },
+        features: {},
+        getPlayer: async () => ({
+          getData: async () => ({ saveData: { coins: 555 } }),
+          setData: async (data: { saveData: unknown }) => {
+            savedCloud = data.saveData;
+          }
+        })
+      })
+    };
+    const sdk = new YandexSdkService();
+    await sdk.init();
+    const cloud = await sdk.loadCloudSave<{ coins: number }>();
+    expect(cloud?.coins).toBe(555);
+    await sdk.saveCloudData({ coins: 888 });
+    expect(savedCloud).toEqual({ coins: 888 });
+    delete (window as any).YaGames;
+  });
 });
 
 describe("интеграция сохранений", () => {

@@ -55,6 +55,15 @@ export interface CampaignDay {
   targetScore: number;
 }
 
+export type CosmeticCategory = "cups" | "samovars" | "tablecloths" | "trays" | "backgrounds" | "steamEffects";
+
+export interface AchievementDefinition {
+  id: string;
+  name: string;
+  description: string;
+  reward: number;
+}
+
 const recipeRows: [string, string, IngredientId[], [number, number], number, number, number, string][] = [
   ["r01", "Чай с сахаром", ["cup", "blackTea", "boilingWater", "sugar"], [78, 86], 2600, 1, 18, "Сначала заварка, потом кипяток, сахар в конце."],
   ["r02", "Чай с лимоном", ["cup", "blackTea", "boilingWater", "lemon"], [76, 84], 2500, 1, 20, "Лимон клади последним, чтобы не перебить вкус."],
@@ -162,7 +171,7 @@ export const campaignDays: CampaignDay[] = Array.from({ length: 40 }, (_, idx) =
   };
 });
 
-export const cosmetics = {
+export const cosmetics: Record<CosmeticCategory, string[]> = {
   cups: ["Классическая чашка", "Синяя чашка", "Праздничная чашка", "Резная чашка"],
   samovars: ["Медный самовар", "Серебряный самовар", "Ярмарочный самовар", "Фестивальный самовар"],
   tablecloths: ["Льняная скатерть", "Красная скатерть", "Звездная скатерть"],
@@ -170,3 +179,72 @@ export const cosmetics = {
   backgrounds: ["Уютный двор", "Шумный вокзал", "Снежная ярмарка", "Театральный зал", "Фестивальная площадь"],
   steamEffects: ["Мягкий пар", "Искристый пар", "Зимний пар"]
 };
+
+export const cosmeticCategoryLabels: Record<CosmeticCategory, string> = {
+  cups: "Чашки",
+  samovars: "Самовары",
+  tablecloths: "Скатерти",
+  trays: "Подносы",
+  backgrounds: "Фоны",
+  steamEffects: "Пар"
+};
+
+export const cosmeticPrices: Record<CosmeticCategory, number> = {
+  cups: 180,
+  samovars: 420,
+  tablecloths: 260,
+  trays: 230,
+  backgrounds: 360,
+  steamEffects: 320
+};
+
+export const achievements: AchievementDefinition[] = [
+  {
+    id: "first_day",
+    name: "Первая смена",
+    description: "Завершить первый день чайной.",
+    reward: 90
+  },
+  {
+    id: "ten_guests",
+    name: "Очередь довольна",
+    description: "Обслужить 10 гостей за все время.",
+    reward: 140
+  },
+  {
+    id: "combo_five",
+    name: "Точная рука",
+    description: "Добиться комбо 5 или выше.",
+    reward: 170
+  },
+  {
+    id: "three_stars",
+    name: "День на отлично",
+    description: "Получить три звезды за день кампании.",
+    reward: 220
+  },
+  {
+    id: "collector",
+    name: "Украшенная чайная",
+    description: "Открыть десять украшений.",
+    reward: 260
+  },
+  {
+    id: "first_chapter",
+    name: "Новая глава",
+    description: "Дойти до второй главы кампании.",
+    reward: 300
+  },
+  {
+    id: "rich_house",
+    name: "Полная касса",
+    description: "Накопить 1500 монет.",
+    reward: 320
+  },
+  {
+    id: "campaign_complete",
+    name: "Фестивальный мастер",
+    description: "Завершить всю кампанию.",
+    reward: 800
+  }
+];
